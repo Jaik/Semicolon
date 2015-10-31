@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,8 +21,14 @@ public class MainActivity extends AppCompatActivity {
                 tv.setText("Clicked captured");
             }
         });
+    }
 
 
-        TalkBackHandler.init(this);
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        TalkBackHandler tbh = new TalkBackHandler();
+        tbh.init(this);
     }
 }

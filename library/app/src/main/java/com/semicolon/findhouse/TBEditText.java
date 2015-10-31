@@ -124,8 +124,8 @@ public class TBEditText extends EditText {
     @Override
     protected void onDraw(Canvas canvas) {
         if (!isInitialized) {
-            watchKey();
-            setTouchListenerOnParent();
+            //watchKey();
+            //setTouchListenerOnParent();
             isInitialized = true;
         }
 

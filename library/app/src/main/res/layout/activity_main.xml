@@ -33,3 +33,4 @@
         android:text="Submit"
         app:talkingText="Hello world" />
 </LinearLayout>
+ 

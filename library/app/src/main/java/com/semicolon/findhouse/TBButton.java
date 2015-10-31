@@ -123,7 +123,7 @@ public class TBButton extends Button {
     protected void onDraw(Canvas canvas) {
 
         if (!isInitialized) {
-            setTouchListenerOnParent();
+            //setTouchListenerOnParent();
             isInitialized = true;
         }
 
