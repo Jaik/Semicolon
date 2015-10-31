@@ -7,7 +7,8 @@ import android.speech.tts.TextToSpeech;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import java.util.Locale;
@@ -15,21 +16,23 @@ import java.util.Locale;
 /**
  * Created by mohit on 10/31/2015.
  */
-public class TBButton extends Button {
+public class TBCheckBox extends CheckBox {
 
     Boolean canVibrate = true;
     TextToSpeech t1;
     public String talkingText;
     boolean isTouchedTwice = false;
+    boolean setRadioButton = false;
     OnClickListener listener;
     long lastVibrationTime = System.currentTimeMillis();
     boolean isInitialized = false;
+    boolean currentState = false;
 
-    public TBButton(Context context) {
+    public TBCheckBox(Context context) {
         super(context);
     }
 
-    public TBButton(Context context, AttributeSet attrs) {
+    public TBCheckBox(Context context, AttributeSet attrs) {
         super(context, attrs);
         talkingText = context.obtainStyledAttributes(attrs, R.styleable.TBButton, 0, 0).getString(0);
 
@@ -45,7 +48,7 @@ public class TBButton extends Button {
 
     }
 
-    public TBButton(Context context, AttributeSet attrs, int defStyleAttr) {
+    public TBCheckBox(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -70,7 +73,7 @@ public class TBButton extends Button {
                 canVibrate = false;
                 break;
             case MotionEvent.ACTION_UP:
-                handleDoubleTap();
+                //handleDoubleTap();
 //                Toast.makeText(getContext(), "Raja", Toast.LENGTH_SHORT).show();
                 break;
         }
@@ -79,9 +82,9 @@ public class TBButton extends Button {
 
 
     private void handleDoubleTap() {
+        currentState = isChecked();
         if (isTouchedTwice) {
-            listener.onClick(this);
-            Toast.makeText(getContext(), talkingText, Toast.LENGTH_SHORT).show();
+            setRadioButton = true;
         } else {
             isTouchedTwice = true;
 
@@ -95,7 +98,6 @@ public class TBButton extends Button {
     }
 
     private void vibrate() {
-
         if (canVibrate && lastVibrationTime + 300 < System.currentTimeMillis()) {
             canVibrate = false;
             lastVibrationTime = System.currentTimeMillis();
@@ -120,14 +122,34 @@ public class TBButton extends Button {
 
     @Override
     protected void onDraw(Canvas canvas) {
-
         if (!isInitialized) {
             //setTouchListenerOnParent();
             isInitialized = true;
         }
 
+        setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isTouchedTwice) {
+                    setChecked(isChecked);
+                    Toast.makeText(getContext(), talkingText, Toast.LENGTH_SHORT).show();
+                } else {
+                    setChecked(!isChecked);
+                    isTouchedTwice = true;
+                    new android.os.Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            isTouchedTwice = false;
+                        }
+                    }, 500);
+                }
+            }
+        });
         super.onDraw(canvas);
     }
+
+
     private void setTouchListenerOnParent() {
         final float viewX1 = this.getX();
         final float viewX2 = viewX1 + this.getWidth();
@@ -150,5 +172,5 @@ public class TBButton extends Button {
             }
         });
     }
-    
+
 }

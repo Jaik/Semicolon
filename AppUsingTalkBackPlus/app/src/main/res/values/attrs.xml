@@ -1,0 +1,5 @@
+<resources>
+    <declare-styleable name="TBButton">
+        <attr name="talkingText" format="string" />
+    </declare-styleable>
+</resources>

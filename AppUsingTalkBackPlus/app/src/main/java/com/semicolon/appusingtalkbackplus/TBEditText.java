@@ -1,13 +1,16 @@
-package com.semicolon.findhouse;
+package com.semicolon.appusingtalkbackplus;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
+import android.text.Editable;
+import android.text.method.KeyListener;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.Locale;
@@ -15,21 +18,22 @@ import java.util.Locale;
 /**
  * Created by mohit on 10/31/2015.
  */
-public class TBButton extends Button {
+public class TBEditText extends EditText {
 
     Boolean canVibrate = true;
     TextToSpeech t1;
-    public String talkingText;
+    String talkingText;
     boolean isTouchedTwice = false;
     OnClickListener listener;
     long lastVibrationTime = System.currentTimeMillis();
+
     boolean isInitialized = false;
 
-    public TBButton(Context context) {
+    public TBEditText(Context context) {
         super(context);
     }
 
-    public TBButton(Context context, AttributeSet attrs) {
+    public TBEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         talkingText = context.obtainStyledAttributes(attrs, R.styleable.TBButton, 0, 0).getString(0);
 
@@ -42,10 +46,9 @@ public class TBButton extends Button {
             }
         });
 
-
     }
 
-    public TBButton(Context context, AttributeSet attrs, int defStyleAttr) {
+    public TBEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -70,7 +73,7 @@ public class TBButton extends Button {
                 canVibrate = false;
                 break;
             case MotionEvent.ACTION_UP:
-                handleDoubleTap();
+                //handleDoubleTap();
 //                Toast.makeText(getContext(), "Raja", Toast.LENGTH_SHORT).show();
                 break;
         }
@@ -120,14 +123,15 @@ public class TBButton extends Button {
 
     @Override
     protected void onDraw(Canvas canvas) {
-
         if (!isInitialized) {
+            //watchKey();
             //setTouchListenerOnParent();
             isInitialized = true;
         }
 
         super.onDraw(canvas);
     }
+
     private void setTouchListenerOnParent() {
         final float viewX1 = this.getX();
         final float viewX2 = viewX1 + this.getWidth();
@@ -150,5 +154,48 @@ public class TBButton extends Button {
             }
         });
     }
-    
+
+    private void watchKey() {
+        this.setKeyListener(new KeyListener() {
+            @Override
+            public int getInputType() {
+                return 1;
+            }
+
+            @Override
+            public boolean onKeyDown(View view, Editable text, int keyCode, KeyEvent event) {
+                return true;
+            }
+
+            @Override
+            public boolean onKeyUp(View view, Editable text, int keyCode, KeyEvent event) {
+                return true;
+            }
+
+            @Override
+            public boolean onKeyOther(View view, Editable text, KeyEvent event) {
+                return false;
+            }
+
+            @Override
+            public void clearMetaKeyState(View view, Editable content, int states) {
+
+            }
+        });
+
+    }
+
+
+    @Override
+    public boolean onKeyPreIme(int keyCode, KeyEvent event) {
+        String s = String.valueOf(event.getKeyCharacterMap().getDisplayLabel(event.getKeyCode()));
+
+        if (!t1.isSpeaking()) {
+            t1.speak(s, TextToSpeech.QUEUE_FLUSH, null);
+        }
+
+        return super.onKeyPreIme(keyCode, event);
+    }
+
+
 }

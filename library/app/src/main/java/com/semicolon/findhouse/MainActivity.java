@@ -21,8 +21,8 @@ public class MainActivity extends AppCompatActivity {
                 tv.setText("Clicked captured");
             }
         });
-    }
 
+    }
 
 
     @Override
