@@ -22,5 +22,8 @@ public class MainActivity extends AppCompatActivity {
                 tv.setText("Clicked captured");
             }
         });
+
+
+        TalkBackHandler.init(this);
     }
 }
