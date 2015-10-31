@@ -19,7 +19,7 @@
         android:id="@+id/btn_submit"
         android:layout_width="100dp"
         android:layout_height="80dp"
-        app:talkingText="Oye"
+        app:talkingText="Hello world"
         android:text="Submit"
         android:layout_below="@+id/txt_status"/>
 </RelativeLayout>
