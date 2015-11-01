@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AppUsingTalkBackPlus.iml" filepath="$PROJECT_DIR$/AppUsingTalkBackPlus.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/talkbackpluslibrary/talkbackpluslibrary.iml" filepath="$PROJECT_DIR$/talkbackpluslibrary/talkbackpluslibrary.iml" />
     </modules>
   </component>
 </project>

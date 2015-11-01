@@ -40,5 +40,11 @@
         android:text="Remember me"
         app:talkingText="Tap here to remember" />
 
+    <com.semicolon.findhouse.TBImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/img"
+        app:talkingText="Image" />
+
 </LinearLayout>
  

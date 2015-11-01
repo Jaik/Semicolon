@@ -1,4 +1,4 @@
-package com.semicolon.appusingtalkbackplus;
+package com.semicolon.talkbackpluslibrary;
 
 import android.app.Activity;
 import android.content.Context;

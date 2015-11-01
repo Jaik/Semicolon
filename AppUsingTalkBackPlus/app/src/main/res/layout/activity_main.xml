@@ -7,7 +7,7 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp">
 
-    <com.semicolon.appusingtalkbackplus.TBEditText
+    <com.semicolon.talkbackpluslibrary.TBEditText
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="46dp"
@@ -18,7 +18,7 @@
         android:textColor="#333"
         app:talkingText="Please enter user ID" />
 
-    <com.semicolon.appusingtalkbackplus.TBEditText
+    <com.semicolon.talkbackpluslibrary.TBEditText
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="46dp"
@@ -30,7 +30,7 @@
         android:textColor="#333"
         app:talkingText="Please enter password" />
 
-    <com.semicolon.appusingtalkbackplus.TBButton
+    <com.semicolon.talkbackpluslibrary.TBButton
         android:id="@+id/email_sign_in_button"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -41,7 +41,7 @@
         android:textSize="22sp"
         app:talkingText="Login Button" />
 
-    <com.semicolon.appusingtalkbackplus.TBCheckBox
+    <com.semicolon.talkbackpluslibrary.TBCheckBox
         android:id="@+id/radio_male"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -1,10 +1,11 @@
-package com.semicolon.appusingtalkbackplus;
+package com.semicolon.talkbackpluslibrary;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
 import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.method.KeyListener;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
@@ -35,7 +36,7 @@ public class TBEditText extends EditText {
 
     public TBEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        talkingText = context.obtainStyledAttributes(attrs, R.styleable.TBButton, 0, 0).getString(0);
+        talkingText = context.obtainStyledAttributes(attrs, R.styleable.TBEditText, 0, 0).getString(0);
 
         t1 = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
@@ -127,6 +128,25 @@ public class TBEditText extends EditText {
             //watchKey();
             //setTouchListenerOnParent();
             isInitialized = true;
+
+            addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (!t1.isSpeaking() && !(s + "").isEmpty()) {
+                        t1.speak(s.charAt(s.length() - 1) + "", TextToSpeech.QUEUE_FLUSH, null);
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
         }
 
         super.onDraw(canvas);
@@ -196,6 +216,4 @@ public class TBEditText extends EditText {
 
         return super.onKeyPreIme(keyCode, event);
     }
-
-
 }

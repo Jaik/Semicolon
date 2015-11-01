@@ -1,0 +1,9 @@
+<resources>
+    <!--<declare-styleable name="TBButton">-->
+    <!--<attr name="talkingText" format="string" />-->
+    <!--</declare-styleable>-->
+    <declare-styleable name="TBEditText">
+        <attr name="talkingText" format="string" />
+    </declare-styleable>
+
+</resources>

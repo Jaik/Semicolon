@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical"></LinearLayout>
+    android:orientation="vertical">
+
+    <com.semicolon.talkbackpluslibrary.TBImageView
+        android:layout_width="500dp"
+        android:layout_height="200dp"
+        android:background="#ffffff"
+        android:src="@drawable/img"
+        app:talkingText="A fully furnished master bedroom with a beautiful view" />
+</LinearLayout>

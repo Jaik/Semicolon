@@ -1,4 +1,4 @@
-package com.semicolon.appusingtalkbackplus;
+package com.semicolon.findhouse;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -7,31 +7,28 @@ import android.speech.tts.TextToSpeech;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.Locale;
 
 /**
  * Created by mohit on 10/31/2015.
  */
-public class TBCheckBox extends CheckBox {
+public class TBImageView extends ImageView {
 
     Boolean canVibrate = true;
     TextToSpeech t1;
     public String talkingText;
     boolean isTouchedTwice = false;
-    boolean setRadioButton = false;
-    OnClickListener listener;
     long lastVibrationTime = System.currentTimeMillis();
     boolean isInitialized = false;
-    boolean currentState = false;
 
-    public TBCheckBox(Context context) {
+    public TBImageView(Context context) {
         super(context);
     }
 
-    public TBCheckBox(Context context, AttributeSet attrs) {
+    public TBImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         talkingText = context.obtainStyledAttributes(attrs, R.styleable.TBButton, 0, 0).getString(0);
 
@@ -47,7 +44,7 @@ public class TBCheckBox extends CheckBox {
 
     }
 
-    public TBCheckBox(Context context, AttributeSet attrs, int defStyleAttr) {
+    public TBImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -66,13 +63,13 @@ public class TBCheckBox extends CheckBox {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 canVibrate = true;
-                vibrate();
+                talkBack();
                 break;
             case MotionEvent.ACTION_MOVE:
                 canVibrate = false;
                 break;
             case MotionEvent.ACTION_UP:
-                //handleDoubleTap();
+
 //                Toast.makeText(getContext(), "Raja", Toast.LENGTH_SHORT).show();
                 break;
         }
@@ -81,9 +78,9 @@ public class TBCheckBox extends CheckBox {
 
 
     private void handleDoubleTap() {
-        currentState = isChecked();
         if (isTouchedTwice) {
-            setRadioButton = true;
+
+            Toast.makeText(getContext(), talkingText, Toast.LENGTH_SHORT).show();
         } else {
             isTouchedTwice = true;
 
@@ -97,6 +94,7 @@ public class TBCheckBox extends CheckBox {
     }
 
     private void vibrate() {
+
         if (canVibrate && lastVibrationTime + 300 < System.currentTimeMillis()) {
             canVibrate = false;
             lastVibrationTime = System.currentTimeMillis();
@@ -113,41 +111,18 @@ public class TBCheckBox extends CheckBox {
         }
     }
 
-    @Override
-    public void setOnClickListener(OnClickListener l) {
-        this.listener = l;
-        //super.setOnClickListener(l);
-    }
+
 
     @Override
     protected void onDraw(Canvas canvas) {
+
         if (!isInitialized) {
             //setTouchListenerOnParent();
             isInitialized = true;
         }
 
-        setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isTouchedTwice) {
-                    setChecked(isChecked);
-                } else {
-                    setChecked(!isChecked);
-                    isTouchedTwice = true;
-                    new android.os.Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            isTouchedTwice = false;
-                        }
-                    }, 500);
-                }
-            }
-        });
         super.onDraw(canvas);
     }
-
-
     private void setTouchListenerOnParent() {
         final float viewX1 = this.getX();
         final float viewX2 = viewX1 + this.getWidth();
@@ -170,5 +145,5 @@ public class TBCheckBox extends CheckBox {
             }
         });
     }
-
+    
 }
