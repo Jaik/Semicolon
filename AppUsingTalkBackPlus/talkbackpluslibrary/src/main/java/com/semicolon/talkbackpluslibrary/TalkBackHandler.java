@@ -12,7 +12,7 @@ import android.view.ViewGroup;
  */
 public class TalkBackHandler {
 
-    static boolean TalkBackMode = false;
+    public static boolean TalkBackMode = false;
     boolean canVibrate = true;
     long lastVibrationTime = System.currentTimeMillis();
     Context context;
