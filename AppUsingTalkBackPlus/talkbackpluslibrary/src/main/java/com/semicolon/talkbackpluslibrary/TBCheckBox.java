@@ -6,7 +6,6 @@ import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
@@ -58,43 +57,26 @@ public class TBCheckBox extends CheckBox {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        final float viewX1 = this.getX();
-        final float viewX2 = viewX1 + this.getWidth();
-        final float viewY1 = this.getY();
-        final float viewY2 = viewY1 + this.getHeight();
 
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                canVibrate = true;
-                vibrate();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                canVibrate = false;
-                break;
-            case MotionEvent.ACTION_UP:
-                //handleDoubleTap();
-//                Toast.makeText(getContext(), "Raja", Toast.LENGTH_SHORT).show();
-                break;
+        if(TalkBackHandler.TalkBackMode) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    canVibrate = true;
+                    vibrate();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    canVibrate = false;
+                    break;
+                case MotionEvent.ACTION_UP:
+
+                    break;
+            }
         }
         return super.onTouchEvent(event);
     }
 
 
-    private void handleDoubleTap() {
-        currentState = isChecked();
-        if (isTouchedTwice) {
-            setRadioButton = true;
-        } else {
-            isTouchedTwice = true;
 
-            new android.os.Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    isTouchedTwice = false;
-                }
-            }, 500);
-        }
-    }
 
     private void vibrate() {
         if (canVibrate && lastVibrationTime + 300 < System.currentTimeMillis()) {
@@ -130,45 +112,27 @@ public class TBCheckBox extends CheckBox {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isTouchedTwice) {
-                    setChecked(isChecked);
-                } else {
-                    setChecked(!isChecked);
-                    isTouchedTwice = true;
-                    new android.os.Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            isTouchedTwice = false;
-                        }
-                    }, 500);
+                if (TalkBackHandler.TalkBackMode) {
+                    if (isTouchedTwice) {
+                        setChecked(isChecked);
+                    } else {
+                        setChecked(!isChecked);
+                        isTouchedTwice = true;
+                        new android.os.Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                isTouchedTwice = false;
+                            }
+                        }, 500);
+                    }
                 }
             }
         });
+
         super.onDraw(canvas);
     }
 
 
-    private void setTouchListenerOnParent() {
-        final float viewX1 = this.getX();
-        final float viewX2 = viewX1 + this.getWidth();
-        final float viewY1 = this.getY();
-        final float viewY2 = viewY1 + this.getHeight();
 
-        ((View) this.getParent()).setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() ==
-                        MotionEvent.ACTION_MOVE) {
-                    if (viewX1 <= event.getX() && event.getX() <= viewX2
-                            && viewY1 <= event.getY() && event.getY() <= viewY2) {
-                        canVibrate = true;
-                        vibrate();
-                        return false;
-                    }
-                }
-                return true;
-            }
-        });
-    }
 
 }

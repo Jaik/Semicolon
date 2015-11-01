@@ -6,13 +6,10 @@ import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.method.KeyListener;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -60,43 +57,27 @@ public class TBEditText extends EditText {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        final float viewX1 = this.getX();
-        final float viewX2 = viewX1 + this.getWidth();
-        final float viewY1 = this.getY();
-        final float viewY2 = viewY1 + this.getHeight();
+        if(TalkBackHandler.TalkBackMode) {
 
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                canVibrate = true;
-                vibrate();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                canVibrate = false;
-                break;
-            case MotionEvent.ACTION_UP:
-                //handleDoubleTap();
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    canVibrate = true;
+                    vibrate();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    canVibrate = false;
+                    break;
+                case MotionEvent.ACTION_UP:
+                    //handleDoubleTap();
 //                Toast.makeText(getContext(), "Raja", Toast.LENGTH_SHORT).show();
-                break;
+                    break;
+            }
         }
         return super.onTouchEvent(event);
     }
 
 
-    private void handleDoubleTap() {
-        if (isTouchedTwice) {
-            listener.onClick(this);
-            Toast.makeText(getContext(), talkingText, Toast.LENGTH_SHORT).show();
-        } else {
-            isTouchedTwice = true;
 
-            new android.os.Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    isTouchedTwice = false;
-                }
-            }, 500);
-        }
-    }
 
     private void vibrate() {
 
@@ -137,8 +118,10 @@ public class TBEditText extends EditText {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (!t1.isSpeaking() && !(s + "").isEmpty()) {
-                        t1.speak(s.charAt(s.length() - 1) + "", TextToSpeech.QUEUE_FLUSH, null);
+                    if (TalkBackHandler.TalkBackMode) {
+                        if (!t1.isSpeaking() && !(s + "").isEmpty()) {
+                            t1.speak(s.charAt(s.length() - 1) + "", TextToSpeech.QUEUE_FLUSH, null);
+                        }
                     }
                 }
 
@@ -152,58 +135,8 @@ public class TBEditText extends EditText {
         super.onDraw(canvas);
     }
 
-    private void setTouchListenerOnParent() {
-        final float viewX1 = this.getX();
-        final float viewX2 = viewX1 + this.getWidth();
-        final float viewY1 = this.getY();
-        final float viewY2 = viewY1 + this.getHeight();
 
-        ((View) this.getParent()).setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() ==
-                        MotionEvent.ACTION_MOVE) {
-                    if (viewX1 <= event.getX() && event.getX() <= viewX2
-                            && viewY1 <= event.getY() && event.getY() <= viewY2) {
-                        canVibrate = true;
-                        vibrate();
-                        return false;
-                    }
-                }
-                return true;
-            }
-        });
-    }
 
-    private void watchKey() {
-        this.setKeyListener(new KeyListener() {
-            @Override
-            public int getInputType() {
-                return 1;
-            }
-
-            @Override
-            public boolean onKeyDown(View view, Editable text, int keyCode, KeyEvent event) {
-                return true;
-            }
-
-            @Override
-            public boolean onKeyUp(View view, Editable text, int keyCode, KeyEvent event) {
-                return true;
-            }
-
-            @Override
-            public boolean onKeyOther(View view, Editable text, KeyEvent event) {
-                return false;
-            }
-
-            @Override
-            public void clearMetaKeyState(View view, Editable content, int states) {
-
-            }
-        });
-
-    }
 
 
     @Override

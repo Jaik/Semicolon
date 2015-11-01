@@ -1,12 +1,10 @@
 package com.semicolon.talkbackpluslibrary;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.Button;
 
 import java.util.Locale;
@@ -55,22 +53,25 @@ public class TBButton extends Button {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        final float viewX1 = this.getX();
-        final float viewX2 = viewX1 + this.getWidth();
-        final float viewY1 = this.getY();
-        final float viewY2 = viewY1 + this.getHeight();
 
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                canVibrate = true;
-                vibrate();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                canVibrate = false;
-                break;
-            case MotionEvent.ACTION_UP:
-                handleDoubleTap();
-                break;
+        if(TalkBackHandler.TalkBackMode) {
+            final float viewX1 = this.getX();
+            final float viewX2 = viewX1 + this.getWidth();
+            final float viewY1 = this.getY();
+            final float viewY2 = viewY1 + this.getHeight();
+
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    canVibrate = true;
+                    vibrate();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    canVibrate = false;
+                    break;
+                case MotionEvent.ACTION_UP:
+                    handleDoubleTap();
+                    break;
+            }
         }
         return super.onTouchEvent(event);
     }
@@ -79,7 +80,6 @@ public class TBButton extends Button {
     private void handleDoubleTap() {
         if (isTouchedTwice) {
             listener.onClick(this);
-//            Toast.makeText(getContext(), talkingText, Toast.LENGTH_SHORT).show();
         } else {
             isTouchedTwice = true;
 
@@ -112,42 +112,15 @@ public class TBButton extends Button {
 
     @Override
     public void setOnClickListener(OnClickListener l) {
-        this.listener = l;
-        //super.setOnClickListener(l);
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-
-        if (!isInitialized) {
-            //setTouchListenerOnParent();
-            isInitialized = true;
+        if(TalkBackHandler.TalkBackMode) {
+            this.listener = l;
         }
-
-        super.onDraw(canvas);
+        else {
+            super.setOnClickListener(l);
+        }
     }
 
-    private void setTouchListenerOnParent() {
-        final float viewX1 = this.getX();
-        final float viewX2 = viewX1 + this.getWidth();
-        final float viewY1 = this.getY();
-        final float viewY2 = viewY1 + this.getHeight();
 
-        ((View) this.getParent()).setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() ==
-                        MotionEvent.ACTION_MOVE) {
-                    if (viewX1 <= event.getX() && event.getX() <= viewX2
-                            && viewY1 <= event.getY() && event.getY() <= viewY2) {
-                        canVibrate = true;
-                        vibrate();
-                        return false;
-                    }
-                }
-                return true;
-            }
-        });
-    }
+
 
 }

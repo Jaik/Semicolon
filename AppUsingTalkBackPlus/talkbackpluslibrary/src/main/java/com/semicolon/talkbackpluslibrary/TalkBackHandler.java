@@ -12,6 +12,7 @@ import android.view.ViewGroup;
  */
 public class TalkBackHandler {
 
+    static boolean TalkBackMode = false;
     boolean canVibrate = true;
     long lastVibrationTime = System.currentTimeMillis();
     Context context;
@@ -29,29 +30,32 @@ public class TalkBackHandler {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                for (int i = 0; i < decorLayout.getChildCount(); i++) {
-                    view[0] = decorLayout.getChildAt(i);
-                    viewCoordinates[i] = new ViewCoordinate(view[0].getX(), view[0].getX() + view[0].getWidth(), view[0].getY()
-                            , view[0].getY() + view[0].getHeight());
+                if (TalkBackMode) {
+                    for (int i = 0; i < decorLayout.getChildCount(); i++) {
+                        view[0] = decorLayout.getChildAt(i);
+                        viewCoordinates[i] = new ViewCoordinate(view[0].getX(), view[0].getX() + view[0].getWidth(), view[0].getY()
+                                , view[0].getY() + view[0].getHeight());
 
-                }
-
-                if (event.getAction() ==
-                        MotionEvent.ACTION_MOVE) {
-                    for (ViewCoordinate cordinate : viewCoordinates) {
-
-                        if (cordinate.X1 <= event.getX() && event.getX() <= cordinate.X2
-                                && cordinate.Y1 <= event.getY() && event.getY() <= cordinate.Y2) {
-                            canVibrate = true;
-                            vibrate();
-                            break;
-                        }
                     }
 
+                    if (event.getAction() ==
+                            MotionEvent.ACTION_MOVE) {
+                        for (ViewCoordinate cordinate : viewCoordinates) {
+
+                            if (cordinate.X1 <= event.getX() && event.getX() <= cordinate.X2
+                                    && cordinate.Y1 <= event.getY() && event.getY() <= cordinate.Y2) {
+                                canVibrate = true;
+                                vibrate();
+                                break;
+                            }
+                        }
+
+                    }
                 }
                 return true;
             }
         });
+
 
     }
 
